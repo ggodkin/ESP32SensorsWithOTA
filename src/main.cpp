@@ -37,6 +37,7 @@
   #define LED_PIN_MACRO     99
   //Deep Sleep time in microseconds
   #define sleepTime 120e6   //2min
+  #define BOARD_IDENTIFIER "ESP32_DEBUG_2"
 #elif DEBUG == 1
   #define debugln(x) Serial.println(x)
   #define debug(x) Serial.print(x)
@@ -45,6 +46,7 @@
   #define LED_PIN_MACRO     LED_BUILTIN
   //Deep Sleep time in microseconds
   #define sleepTime 120e6   //2min
+  #define BOARD_IDENTIFIER "ESP32_DEBUG_1"
 #elif DEBUG == 4
   #define debugln(x) Serial.println(x)
   #define debug(x) Serial.print(x)
@@ -53,6 +55,7 @@
   #define LED_PIN_MACRO     LED_BUILTIN
   //Deep Sleep time in microseconds
   #define sleepTime 30e6    //30 sec
+  #define BOARD_IDENTIFIER "ESP32_DEBUG_1"
 #else // DEBUG == 0 or undefined
   #define debugln(x)
   #define debug(x)
@@ -61,6 +64,7 @@
   #define LED_PIN_MACRO     LED_BUILTIN
   //Deep Sleep time in microseconds
   #define sleepTime 900e6   //15min
+  #define BOARD_IDENTIFIER "ESP32_RainGaugePlus"
 #endif
 
 
@@ -305,7 +309,8 @@ static void EspWifiEventHandler(void* arg, esp_event_base_t event_base,
                   // Prepare rain event message into myData.a
                   char temp_str[20];
                   sprintf(temp_str, "%d", savedRainGaugeTips);
-                  strcpy(myData.a, "ESP32|RainEvent|Tips|"); // Start with "ESP32" prefix
+                  strcpy(myData.a, BOARD_IDENTIFIER); // Use BOARD_IDENTIFIER here
+                  strcat(myData.a, "|RainEvent|Tips|");
                   strcat(myData.a, temp_str);
 
                   debug("EspWifiEventHandler - Rain Event Message to send (payload): ");
@@ -393,7 +398,7 @@ static void EspWifiEventHandler(void* arg, esp_event_base_t event_base,
 #endif
 
                   // Set values to send - Start with BOARD identifier
-                  strcpy(myData.a, "ESP32"); // Use "ESP32" as the board identifier
+                  strcpy(myData.a, BOARD_IDENTIFIER); // Use "ESP32" as the board identifier
 
                   if (devCount > 0) { // Only attempt to read if sensors are found
                       sensors.setResolution(12); // Ensure resolution is set
